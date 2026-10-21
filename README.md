@@ -2,6 +2,8 @@
 
 这是一个无需安装依赖的单页个人网站，使用原生 HTML、CSS 和 JavaScript 构建。直接双击 `index.html` 即可预览，也可以部署到 GitHub Pages、Netlify 等静态网站托管服务。
 
+长期公网地址：[https://iris-hyt.github.io/huang-yuting-portfolio/](https://iris-hyt.github.io/huang-yuting-portfolio/)
+
 ## 文件说明
 
 ```text
