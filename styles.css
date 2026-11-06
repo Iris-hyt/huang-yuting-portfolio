@@ -194,8 +194,8 @@ figure {
     "location location";
   column-gap: clamp(1.5rem, 4vw, 3.5rem);
   align-items: start;
-  min-height: calc(100svh - 10rem);
-  padding: clamp(4rem, 10vh, 7rem) 0 clamp(4rem, 8vh, 6rem);
+  min-height: auto;
+  padding: clamp(4rem, 8vh, 6rem) 0 clamp(4rem, 7vh, 5rem);
 }
 
 .hero-name {
@@ -438,15 +438,20 @@ figure {
 }
 
 .skill-list {
-  max-width: 35rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 3rem;
+  width: 100%;
   margin-top: clamp(3rem, 7vw, 5rem);
 }
 
 .skill-list > div {
-  display: grid;
-  grid-template-columns: 9rem minmax(0, 1fr);
-  gap: 1.5rem;
+  display: block;
   padding: 1rem 0;
+}
+
+.skill-list > div:last-child {
+  grid-column: 1 / -1;
 }
 
 .skill-list dt {
@@ -455,7 +460,9 @@ figure {
 }
 
 .skill-list dd {
+  margin-top: 0.35rem;
   color: var(--dark-muted);
+  text-align: left;
 }
 
 .experience-list {
@@ -466,9 +473,13 @@ figure {
 
 .experience-list article {
   display: grid;
-  grid-template-columns: 9rem minmax(0, 1fr);
+  grid-template-columns: 9rem minmax(0, 0.9fr) minmax(0, 1.1fr);
   gap: 1.5rem;
   align-items: baseline;
+}
+
+.experience-list article > div {
+  display: contents;
 }
 
 .experience-list time {
@@ -484,7 +495,8 @@ figure {
 }
 
 .experience-list p {
-  margin-top: 0.25rem;
+  grid-column: 3;
+  margin-top: 0;
   color: var(--muted);
   font-size: var(--step-small);
 }
@@ -776,16 +788,25 @@ figure {
     gap: 1.25rem;
   }
 
-  .skill-list > div {
-    gap: 0.35rem;
+  .skill-list {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
   .experience-list article {
     gap: 0.35rem;
   }
 
+  .experience-list article > div {
+    display: block;
+  }
+
   .experience-list time {
     order: -1;
+  }
+
+  .experience-list p {
+    margin-top: 0.25rem;
   }
 
   .contact {
