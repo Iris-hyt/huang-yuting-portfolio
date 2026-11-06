@@ -25,27 +25,6 @@
   <a class="skip-link" href="#main-content">跳到主要内容</a>
 
   <div class="site">
-    <aside class="visual-panel" aria-label="黄钰婷的照片">
-      <div class="scene-stack">
-        <figure class="scene is-active" data-photo="hero">
-          <img src="assets/portrait.jpg" alt="黄钰婷的个人照片" width="256" height="329" fetchpriority="high">
-        </figure>
-        <figure class="scene" data-photo="face" aria-hidden="true">
-          <img src="assets/portrait-face.jpg" alt="" width="640" height="800" loading="lazy">
-        </figure>
-        <figure class="scene" data-photo="tie" aria-hidden="true">
-          <img src="assets/portrait-tie.jpg" alt="" width="640" height="800" loading="lazy">
-        </figure>
-        <figure class="scene" data-photo="lapel" aria-hidden="true">
-          <img src="assets/portrait-lapel.jpg" alt="" width="640" height="800" loading="lazy">
-        </figure>
-      </div>
-      <div class="visual-caption">
-        <span>黄钰婷</span>
-        <span>广州 · 2027 届</span>
-      </div>
-    </aside>
-
     <div class="reading-panel">
       <header class="topbar">
         <a class="wordmark" href="#home">黄钰婷</a>
@@ -61,9 +40,12 @@
       </header>
 
       <main id="main-content">
-        <section class="hero" id="home" data-visual="hero" aria-labelledby="hero-title">
+        <section class="hero" id="home" aria-labelledby="hero-title">
           <p class="hero-name">黄钰婷</p>
           <h1 id="hero-title">市场运营 / 产品运营</h1>
+          <figure class="hero-portrait">
+            <img src="assets/portrait.jpg" alt="黄钰婷的个人照片" width="256" height="329" fetchpriority="high">
+          </figure>
           <p class="hero-summary">关注用户需求，也重视执行落地。</p>
           <div class="hero-actions">
             <a class="button" href="#projects">查看项目</a>
@@ -86,7 +68,7 @@
           <p class="hero-location">广州 · 2027 届</p>
         </section>
 
-        <section class="section about" id="about" data-visual="face" aria-labelledby="about-title">
+        <section class="section about" id="about" aria-labelledby="about-title">
           <div class="about-grid">
             <h2 id="about-title">路径</h2>
             <p class="about-copy">
@@ -95,7 +77,7 @@
           </div>
         </section>
 
-        <section class="section projects" id="projects" data-visual="tie" aria-labelledby="projects-title">
+        <section class="section projects" id="projects" aria-labelledby="projects-title">
           <div class="section-heading">
             <h2 id="projects-title">项目</h2>
           </div>
@@ -154,7 +136,7 @@
           </div>
         </section>
 
-        <section class="skills field-dark" id="skills" data-visual="lapel" aria-labelledby="skills-title">
+        <section class="skills field-dark" id="skills" aria-labelledby="skills-title">
           <h2 id="skills-title">能力</h2>
           <dl class="skill-list">
             <div>
@@ -176,7 +158,7 @@
           </dl>
         </section>
 
-        <section class="section experience" id="experience" data-visual="face" aria-labelledby="experience-title">
+        <section class="section experience" id="experience" aria-labelledby="experience-title">
           <h2 id="experience-title">经历</h2>
           <div class="experience-list">
             <article>
@@ -210,11 +192,12 @@
           </div>
         </section>
 
-        <section class="contact field-dark" id="contact" data-visual="tie" aria-labelledby="contact-title">
+        <section class="contact field-dark" id="contact" aria-labelledby="contact-title">
           <h2 id="contact-title">联系我</h2>
           <p class="contact-note">市场运营 / 产品运营 · 广州</p>
           <div class="contact-actions">
             <a class="contact-email" href="mailto:13289885620@163.com">13289885620@163.com</a>
+            <a class="button" href="mailto:13289885620@163.com">发送邮件</a>
             <button class="copy-button" type="button" data-copy-email="13289885620@163.com">
               复制邮箱
             </button>

@@ -2,8 +2,9 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 const menuButton = document.querySelector(".menu-toggle");
 const navigation = document.querySelector(".site-nav");
 const navLinks = [...document.querySelectorAll(".site-nav a")];
-const visualSections = [...document.querySelectorAll("[data-visual]")];
-const scenes = [...document.querySelectorAll(".scene")];
+const navSections = [...document.querySelectorAll("main section[id]")].filter((section) =>
+  navLinks.some((link) => link.getAttribute("href") === `#${section.id}`),
+);
 
 const closeMenu = () => {
   if (!menuButton || !navigation) return;
@@ -44,21 +45,14 @@ const setCurrentNavigation = (id) => {
   });
 };
 
-const setActiveScene = (name) => {
-  scenes.forEach((scene) => {
-    scene.classList.toggle("is-active", scene.dataset.photo === name);
-  });
-};
-
-if ("IntersectionObserver" in window && visualSections.length) {
-  const sceneObserver = new IntersectionObserver(
+if ("IntersectionObserver" in window && navSections.length) {
+  const sectionObserver = new IntersectionObserver(
     (entries) => {
       const visibleEntry = entries
         .filter((entry) => entry.isIntersecting)
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
 
       if (!visibleEntry) return;
-      setActiveScene(visibleEntry.target.dataset.visual);
       setCurrentNavigation(visibleEntry.target.id);
     },
     {
@@ -67,7 +61,7 @@ if ("IntersectionObserver" in window && visualSections.length) {
     },
   );
 
-  visualSections.forEach((section) => sceneObserver.observe(section));
+  navSections.forEach((section) => sectionObserver.observe(section));
 }
 
 const revealSelectors = [

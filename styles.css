@@ -106,78 +106,13 @@ figure {
 }
 
 .site {
-  display: grid;
-  grid-template-columns: minmax(250px, 0.6fr) minmax(0, 1.4fr);
-  gap: var(--gap);
-  width: min(calc(100% - (var(--margin) * 2)), 1760px);
+  display: block;
+  width: min(calc(100% - (var(--margin) * 2)), 74rem);
   margin: var(--margin) auto;
-  align-items: start;
-}
-
-.visual-panel {
-  position: sticky;
-  top: var(--margin);
-  overflow: clip;
-  height: calc(100svh - (var(--margin) * 2));
-  min-height: 34rem;
-  border-radius: var(--radius);
-  background: var(--surface);
-}
-
-.scene-stack,
-.scene {
-  position: absolute;
-  inset: 0;
-}
-
-.scene {
-  opacity: 0;
-  transition: opacity 1200ms var(--ease-out);
-}
-
-.scene.is-active {
-  opacity: 1;
-}
-
-.scene img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 18%;
-}
-
-.scene:nth-child(2) img,
-.scene:nth-child(3) img {
-  object-position: center 34%;
-}
-
-.scene:nth-child(4) img {
-  object-position: center 42%;
-}
-
-.visual-caption {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  left: 1rem;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
-  border-radius: 0.6rem;
-  background: var(--panel);
-  color: var(--ink);
-  font-size: var(--step-small);
-}
-
-.visual-caption span:first-child {
-  font-family: var(--font-display);
-  font-size: var(--step-lead);
 }
 
 .reading-panel {
+  width: 100%;
   min-width: 0;
   overflow: visible;
   border-radius: var(--radius);
@@ -248,14 +183,23 @@ figure {
 }
 
 .hero {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(6.5rem, 9vw, 8.5rem);
+  grid-template-areas:
+    "name portrait"
+    "title portrait"
+    "summary portrait"
+    "actions portrait"
+    "proof proof"
+    "location location";
+  column-gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
   min-height: calc(100svh - 10rem);
-  flex-direction: column;
-  justify-content: center;
   padding: clamp(4rem, 10vh, 7rem) 0 clamp(4rem, 8vh, 6rem);
 }
 
 .hero-name {
+  grid-area: name;
   font-family: var(--font-display);
   font-size: var(--step-display);
   font-weight: 500;
@@ -264,6 +208,7 @@ figure {
 }
 
 .hero h1 {
+  grid-area: title;
   overflow: clip;
   max-width: 12ch;
   margin-top: 1rem;
@@ -275,7 +220,23 @@ figure {
   text-wrap: balance;
 }
 
+.hero-portrait {
+  grid-area: portrait;
+  width: 100%;
+  overflow: clip;
+  background: var(--surface);
+}
+
+.hero-portrait img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center top;
+}
+
 .hero-summary {
+  grid-area: summary;
   max-width: 28ch;
   margin-top: 1rem;
   color: var(--muted);
@@ -285,6 +246,7 @@ figure {
 }
 
 .hero-actions {
+  grid-area: actions;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -339,6 +301,7 @@ figure {
 }
 
 .proof {
+  grid-area: proof;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
@@ -363,6 +326,7 @@ figure {
 }
 
 .hero-location {
+  grid-area: location;
   margin-top: 2rem;
   color: var(--muted);
   font-size: var(--step-small);
@@ -659,13 +623,6 @@ figure {
     animation-delay: 450ms;
   }
 
-  @supports (animation-timeline: view()) {
-    .visual-panel img {
-      animation: image-drift linear both;
-      animation-timeline: view();
-      animation-range: entry 0% exit 100%;
-    }
-  }
 }
 
 @keyframes content-rise {
@@ -679,30 +636,10 @@ figure {
   }
 }
 
-@keyframes image-drift {
-  from {
-    transform: scale(1.01) translateY(-1.5%);
-  }
-  to {
-    transform: scale(1.03) translateY(1.5%);
-  }
-}
-
 @media (max-width: 980px) {
   .site {
     display: block;
     width: min(calc(100% - (var(--margin) * 2)), 54rem);
-  }
-
-  .visual-panel {
-    position: relative;
-    top: auto;
-    height: 38svh;
-    min-height: 19rem;
-  }
-
-  .reading-panel {
-    margin-top: var(--gap);
   }
 
   .hero {
@@ -783,20 +720,16 @@ figure {
     padding: 0.75rem 1rem;
   }
 
-  .visual-panel {
-    height: 30svh;
-    min-height: 15.5rem;
-  }
-
-  .visual-caption {
-    right: 0.75rem;
-    bottom: 0.75rem;
-    left: 0.75rem;
-    padding: 0.7rem 0.8rem;
-  }
-
   .hero {
+    display: flex;
+    flex-direction: column;
     padding: 4.5rem 0 5.5rem;
+  }
+
+  .hero-portrait {
+    order: -1;
+    width: clamp(4.75rem, 24vw, 6.25rem);
+    margin-bottom: 1.5rem;
   }
 
   .hero-summary {
@@ -897,7 +830,6 @@ figure {
 }
 
 @media print {
-  .visual-panel,
   .topbar,
   .hero-actions,
   .toast {
