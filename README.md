@@ -4,6 +4,8 @@
 
 长期公网地址：[https://iris-hyt.github.io/huang-yuting-portfolio/](https://iris-hyt.github.io/huang-yuting-portfolio/)
 
+如果本机浏览器因代理或 DNS 无法打开 GitHub Pages，可以将 `iris-hyt.github.io` 设置为代理软件中的直连域名。Windows 用户也可以运行 `fix-github-pages-access.ps1`：右键选择“使用 PowerShell 运行”，并在系统提示中允许管理员权限。脚本只会为这一个域名添加官方 GitHub Pages IP，并自动备份原 hosts 文件。
+
 ## 文件说明
 
 ```text

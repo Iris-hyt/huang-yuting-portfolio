@@ -1,25 +1,28 @@
-const menuToggle = document.querySelector("[data-menu-toggle]");
-const navList = document.querySelector("[data-nav-list]");
-const navLinks = [...document.querySelectorAll(".nav-link")];
-const siteHeader = document.querySelector("[data-header]");
-const toast = document.querySelector("[data-toast]");
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const menuButton = document.querySelector(".menu-toggle");
+const navigation = document.querySelector(".site-nav");
+const navLinks = [...document.querySelectorAll(".site-nav a")];
+const visualSections = [...document.querySelectorAll("[data-visual]")];
+const scenes = [...document.querySelectorAll(".scene")];
 
 const closeMenu = () => {
-  if (!menuToggle || !navList) return;
-  menuToggle.setAttribute("aria-expanded", "false");
-  navList.classList.remove("is-open");
+  if (!menuButton || !navigation) return;
+  menuButton.setAttribute("aria-expanded", "false");
+  menuButton.textContent = "菜单";
+  navigation.classList.remove("is-open");
   document.body.classList.remove("menu-open");
 };
 
-if (menuToggle && navList) {
-  menuToggle.addEventListener("click", () => {
-    const willOpen = menuToggle.getAttribute("aria-expanded") !== "true";
-    menuToggle.setAttribute("aria-expanded", String(willOpen));
-    navList.classList.toggle("is-open", willOpen);
-    document.body.classList.toggle("menu-open", willOpen);
-  });
+const toggleMenu = () => {
+  const willOpen = menuButton.getAttribute("aria-expanded") !== "true";
+  menuButton.setAttribute("aria-expanded", String(willOpen));
+  menuButton.textContent = willOpen ? "关闭" : "菜单";
+  navigation.classList.toggle("is-open", willOpen);
+  document.body.classList.toggle("menu-open", willOpen);
+};
 
+if (menuButton && navigation) {
+  menuButton.addEventListener("click", toggleMenu);
   navLinks.forEach((link) => link.addEventListener("click", closeMenu));
 
   document.addEventListener("keydown", (event) => {
@@ -31,25 +34,9 @@ if (menuToggle && navList) {
   });
 }
 
-const updateHeader = () => {
-  siteHeader?.classList.toggle("is-scrolled", window.scrollY > 24);
-};
-
-updateHeader();
-window.addEventListener("scroll", updateHeader, { passive: true });
-
-const sections = navLinks
-  .map((link) => {
-    const id = link.getAttribute("href");
-    return id?.startsWith("#") ? document.querySelector(id) : null;
-  })
-  .filter(Boolean);
-
-const setActiveLink = (id) => {
+const setCurrentNavigation = (id) => {
   navLinks.forEach((link) => {
-    const isActive = link.getAttribute("href") === `#${id}`;
-    link.classList.toggle("is-active", isActive);
-    if (isActive) {
+    if (link.getAttribute("href") === `#${id}`) {
       link.setAttribute("aria-current", "location");
     } else {
       link.removeAttribute("aria-current");
@@ -57,46 +44,74 @@ const setActiveLink = (id) => {
   });
 };
 
-if ("IntersectionObserver" in window && sections.length) {
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+const setActiveScene = (name) => {
+  scenes.forEach((scene) => {
+    scene.classList.toggle("is-active", scene.dataset.photo === name);
+  });
+};
 
-      if (visible[0]) setActiveLink(visible[0].target.id);
+if ("IntersectionObserver" in window && visualSections.length) {
+  const sceneObserver = new IntersectionObserver(
+    (entries) => {
+      const visibleEntry = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (!visibleEntry) return;
+      setActiveScene(visibleEntry.target.dataset.visual);
+      setCurrentNavigation(visibleEntry.target.id);
     },
     {
-      rootMargin: "-24% 0px -58% 0px",
-      threshold: [0, 0.15, 0.35, 0.6],
+      rootMargin: "-35% 0px -48% 0px",
+      threshold: [0, 0.15, 0.4, 0.7],
     },
   );
 
-  sections.forEach((section) => sectionObserver.observe(section));
+  visualSections.forEach((section) => sceneObserver.observe(section));
 }
 
-const revealElements = [...document.querySelectorAll(".reveal")];
+const revealSelectors = [
+  ".section h2",
+  ".section-heading",
+  ".about-grid > *",
+  ".project",
+  ".skill-list > div",
+  ".experience-list article",
+  ".contact h2",
+  ".contact-note",
+  ".contact-actions",
+];
 
-if ("IntersectionObserver" in window && !reduceMotion.matches) {
-  revealElements.forEach((element) => element.classList.add("will-reveal"));
+if ("IntersectionObserver" in window && !prefersReducedMotion.matches) {
+  document.documentElement.classList.add("motion-ready");
+  const revealElements = revealSelectors.flatMap((selector) => [
+    ...document.querySelectorAll(selector),
+  ]);
+
+  revealElements.forEach((element, index) => {
+    element.dataset.reveal = "";
+    element.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 70}ms`);
+  });
 
   const revealObserver = new IntersectionObserver(
     (entries, observer) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
+        entry.target.classList.add("is-in");
         observer.unobserve(entry.target);
       });
     },
-    { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+    {
+      rootMargin: "0px 0px -12% 0px",
+      threshold: 0.08,
+    },
   );
 
   revealElements.forEach((element) => revealObserver.observe(element));
-} else {
-  revealElements.forEach((element) => element.classList.add("is-visible"));
 }
 
 let toastTimer;
+const toast = document.querySelector("[data-toast]");
 
 const showToast = (message) => {
   if (!toast) return;
@@ -121,22 +136,22 @@ const copyText = async (text) => {
   textarea.style.opacity = "0";
   document.body.appendChild(textarea);
   textarea.select();
-  const wasCopied = document.execCommand("copy");
+  const copied = document.execCommand("copy");
   textarea.remove();
 
-  if (!wasCopied) throw new Error("Copy command was rejected");
+  if (!copied) throw new Error("Copy command was rejected");
 };
 
 document.querySelectorAll("[data-copy-email]").forEach((button) => {
   button.addEventListener("click", async () => {
-    const email = button.getAttribute("data-copy-email");
+    const email = button.dataset.copyEmail;
     if (!email) return;
 
     try {
       await copyText(email);
-      showToast("邮箱已复制，期待与你交流。");
+      showToast("邮箱已复制");
     } catch {
-      showToast(`请手动复制邮箱：${email}`);
+      showToast(`请手动复制：${email}`);
     }
   });
 });
